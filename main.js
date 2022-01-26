@@ -42,9 +42,11 @@ async function myEvaluation() {
 
   if (selectedOption == correctAnswerIndex) {
     evalMsg.innerHTML = "Correct!";
+    evalMsg.style.color = "green";
     console.log("correct answer");
   } else {
     evalMsg.innerHTML = "Wrong!";
+    evalMsg.style.color = "red";
     console.log("wrong answer");
   }
 
@@ -57,6 +59,7 @@ async function myEvaluation() {
 }
 
 function proceed() {
+  evalMsg.innerHTML = "";
   proceedButton.style.display = "none";
   evalButton.style.display = "block";
   // Updating the question statement

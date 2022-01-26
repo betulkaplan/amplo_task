@@ -7,20 +7,28 @@
 	<meta name="keywords" content="single-choice exercise basic-data-connection">
 	<script src="main.js" type="text/javascript"></script>
 	<link href="style.css" rel="stylesheet" type="text/css" />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 </head>
 
 <body>
-	<div id="eval-msg"></div>
-	<div class="quiz-container">
-		<p class="question"> Which is the correct option?</p>
-		<div id="options-wrapper">
+	<div class="main">
+		<h2 id="permanent-msg">Please choose the option you think is right.</h2>
+		<div id="eval-msg"></div>
+		<div class="quiz-container">
+			<p class="question"> Which is the correct option?</p>
+			<div id="options-wrapper">
 
+			</div>
+		</div>
+
+		<div class="button-container">
+			<button id="eval-btn" onclick="myEvaluation()">Evaluate!</button>
+			<button id="proceed-btn" class="test">Proceed!</button>
 		</div>
 	</div>
-
-
-	<button id="eval-btn" onclick="myEvaluation()">Evaluate!</button>
-	<button id="proceed-btn" class="test">Proceed!</button>
+	<div class="feedback-container"></div>
 
 	<script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
 		onreadystatechange="if (this.readyState === 'complete') this.onload()">
