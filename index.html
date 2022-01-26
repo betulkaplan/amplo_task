@@ -10,13 +10,17 @@
 </head>
 
 <body>
-	<p class="question"> Which is the correct option?</p>
-	<div id="options-wrapper">
+	<div id="eval-msg"></div>
+	<div class="quiz-container">
+		<p class="question"> Which is the correct option?</p>
+		<div id="options-wrapper">
 
+		</div>
 	</div>
 
-	<button onclick="myEvaluation()">Evaluate!</button>
-	<div id="evaluation-message"></div>
+
+	<button id="eval-btn" onclick="myEvaluation()">Evaluate!</button>
+	<button id="proceed-btn" class="test">Proceed!</button>
 
 	<script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
 		onreadystatechange="if (this.readyState === 'complete') this.onload()">

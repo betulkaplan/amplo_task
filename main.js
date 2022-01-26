@@ -12,70 +12,73 @@ const DISCOVERY_DOCS = [
 const SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly";
 // GAPI Connection
 
+// Global variables
 let options = ["this", "this not", "this either"];
-let states = [false, false, false];
 let correct_answer_index = 0;
 let currentQuestion;
+let selectedOption = null;
+let questions = [];
+let nextQuestion;
 
-document.addEventListener("DOMContentLoaded", init);
-
-function init() {
-  // let optionsContainer = document.querySelector("#options-wrapper");
-  // for (let i = 0; i < options.length; i++) {
-  //   optionsContainer.innerHTML +=
-  //     "<div class='unchosen option'><p class='text'>" +
-  //     options[i] +
-  //     "</p></div>";
-  // }
-  // ...
-}
-
-function toggleChoice(i) {
-  states[i] = true;
-  // ...
-}
+// DOM elements
+let proceedButton;
+let evalButton;
+let evalMsg;
 
 async function myEvaluation() {
+  if (selectedOption === null) {
+    alert("Please select an option!");
+    return;
+  }
+  proceedButton.style.display = "block";
+  evalButton.style.display = "none";
+
+  // Getting the previous question's answer
   const correctAnswerIndex = await getExerciseData(
     "A" + currentQuestion.raw,
     "F" + currentQuestion.raw,
     "single"
   );
-  const correctAnswer = currentQuestion.options[correctAnswerIndex];
-  console.log("correct answer is:", correctAnswer);
 
-  let evMessage = document.querySelector("#evaluation-message");
-  const nextQuestion = nextRandomQuestion();
+  if (selectedOption == correctAnswerIndex) {
+    evalMsg.innerHTML = "Correct!";
+    console.log("correct answer");
+  } else {
+    evalMsg.innerHTML = "Wrong!";
+    console.log("wrong answer");
+  }
+
+  // Getting the next question
+  nextQuestion = nextRandomQuestion();
   currentQuestion = nextQuestion;
   if (nextQuestion === "no more questions") {
     return alert("no more questions");
   }
+}
 
+function proceed() {
+  proceedButton.style.display = "none";
+  evalButton.style.display = "block";
+  // Updating the question statement
   let questionStamentContainer = document.querySelector(".question");
   questionStamentContainer.innerHTML = nextQuestion.statement;
   let optionsContainer = document.querySelector("#options-wrapper");
   optionsContainer.innerHTML = "";
   for (let i = 0; i < nextQuestion.options.length; i++) {
     optionsContainer.innerHTML +=
-      "<div class='unchosen option'><p class='text'>" +
+      `<div onClick={selectOption(${i})} id="opt-${i}" class='unchosen option'><p class='text'>` +
       nextQuestion.options[i] +
       "</p></div>";
-  }
-  for (let i = 0; i < nextQuestion.options.length; i++) {
-    if (states[i] && i == correct_answer_index) {
-      evMessage.innerHTML = "<p>Awesome!</p>";
-      // console.log('awesome')
-      break;
-    } else {
-      evMessage.innerHTML = "<p>Keep trying!</p>";
-      // console.log('tryAgain')
-      break;
-    }
   }
 }
 
 // GAPI Connection
 function handleClientLoad() {
+  proceedButton = document.getElementById("proceed-btn");
+  evalButton = document.getElementById("eval-btn");
+  evalMsg = document.getElementById("eval-msg");
+  proceedButton.style.display = "none";
+  proceedButton.addEventListener("click", proceed);
   gapi.load("client", initClient);
 }
 
@@ -101,22 +104,30 @@ async function getExerciseData(start, end, single) {
     range: `Learning!${start}:${end}`,
   });
 
-  // console.log(response);
-  // console.log("our data here --->", response.result.values);
   if (!single) {
     startTest(response.result.values);
   } else {
-    console.log("single data retrieved");
-    console.log(response.result.values[0]);
     correct_answer_index = parseInt(response.result.values[0][4]);
   }
-
   return correct_answer_index;
 }
 
 // My Code
-let questions = [];
+
+function selectOption(index) {
+  options = document.querySelectorAll(".option");
+  options.forEach((option) => {
+    option.classList.remove("choosen");
+    option.classList.add("unchosen");
+  });
+  selected = document.getElementById(`opt-${index}`);
+  selected.classList.add("choosen");
+  selected.classList.remove("unchosen");
+  selectedOption = index;
+}
+
 function startTest(data) {
+  // Decorating the data
   questions = data.map((question, index) => {
     const topic = question[0];
     const statement = question[2];
@@ -128,19 +139,18 @@ function startTest(data) {
       options,
       raw,
     };
-    // console.log("each question", question);
   });
 
-  /*****test****/
   let max = questions.length;
   let nextIndex = Math.floor(Math.random() * max);
-  currentQuestion = questions[nextIndex];
+  // currentQuestion = questions[nextIndex];
+  currentQuestion = nextRandomQuestion();
   let questionStamentContainer = document.querySelector(".question");
   questionStamentContainer.innerHTML = currentQuestion.statement;
   let optionsContainer = document.querySelector("#options-wrapper");
   for (let i = 0; i < currentQuestion.options.length; i++) {
     optionsContainer.innerHTML +=
-      "<div class='unchosen option'><p class='text'>" +
+      `<div onClick={selectOption(${i})} id="opt-${i}" class='unchosen option'><p class='text'>` +
       currentQuestion.options[i] +
       "</p></div>";
   }
@@ -154,5 +164,6 @@ function nextRandomQuestion() {
     questions.splice(nextIndex, 1);
     return nextQuestion;
   }
+  selectedOption = null;
   return "no more questions";
 }
