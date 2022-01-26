@@ -35,13 +35,12 @@ function toggleChoice(i) {
   // ...
 }
 
-function myEvaluation() {
-  const correctAnswerIndex = getExerciseData(
+async function myEvaluation() {
+  const correctAnswerIndex = await getExerciseData(
     "A" + currentQuestion.raw,
     "F" + currentQuestion.raw,
     "single"
   );
-  debugger;
   const correctAnswer = currentQuestion.options[correctAnswerIndex];
   console.log("correct answer is:", correctAnswer);
 
@@ -96,28 +95,21 @@ function initClient() {
     );
 }
 
-function getExerciseData(start, end, single) {
-  gapi.client.sheets.spreadsheets.values
-    .get({
-      spreadsheetId: "1hzA42BEzt2lPvOAePP6RLLRZKggbg0RWuxSaEwd5xLc",
-      range: `Learning!${start}:${end}`,
-    })
-    .then(
-      function (response) {
-        // console.log(response);
-        // console.log("our data here --->", response.result.values);
-        if (!single) {
-          startTest(response.result.values);
-        } else {
-          console.log("single data retrieved");
-          console.log(response.result.values[0]);
-          correct_answer_index = parseInt(response.result.values[0][4]);
-        }
-      },
-      function (response) {
-        console.log("Error: " + response.result.error.message);
-      }
-    );
+async function getExerciseData(start, end, single) {
+  const response = await gapi.client.sheets.spreadsheets.values.get({
+    spreadsheetId: "1hzA42BEzt2lPvOAePP6RLLRZKggbg0RWuxSaEwd5xLc",
+    range: `Learning!${start}:${end}`,
+  });
+
+  // console.log(response);
+  // console.log("our data here --->", response.result.values);
+  if (!single) {
+    startTest(response.result.values);
+  } else {
+    console.log("single data retrieved");
+    console.log(response.result.values[0]);
+    correct_answer_index = parseInt(response.result.values[0][4]);
+  }
 
   return correct_answer_index;
 }
@@ -140,14 +132,16 @@ function startTest(data) {
   });
 
   /*****test****/
-  currentQuestion = questions[0];
+  let max = questions.length;
+  let nextIndex = Math.floor(Math.random() * max);
+  currentQuestion = questions[nextIndex];
   let questionStamentContainer = document.querySelector(".question");
-  questionStamentContainer.innerHTML = questions[0].statement;
+  questionStamentContainer.innerHTML = currentQuestion.statement;
   let optionsContainer = document.querySelector("#options-wrapper");
-  for (let i = 0; i < questions[0].options.length; i++) {
+  for (let i = 0; i < currentQuestion.options.length; i++) {
     optionsContainer.innerHTML +=
       "<div class='unchosen option'><p class='text'>" +
-      questions[0].options[i] +
+      currentQuestion.options[i] +
       "</p></div>";
   }
 }
