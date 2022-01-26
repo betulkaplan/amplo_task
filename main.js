@@ -19,17 +19,20 @@ let currentQuestion;
 let selectedOption = null;
 let questions = [];
 let nextQuestion;
+let freezeOptions = false;
 
 // DOM elements
 let proceedButton;
 let evalButton;
 let evalMsg;
+let slide;
 
 async function myEvaluation() {
   if (selectedOption === null) {
     alert("Please select an option!");
     return;
   }
+  freezeOptions = true;
   proceedButton.style.display = "block";
   evalButton.style.display = "none";
 
@@ -44,10 +47,12 @@ async function myEvaluation() {
     evalMsg.innerHTML = "Correct!";
     evalMsg.style.color = "green";
     console.log("correct answer");
+    feedbackAction("up", "correct");
   } else {
     evalMsg.innerHTML = "Wrong!";
     evalMsg.style.color = "red";
     console.log("wrong answer");
+    feedbackAction("up", "wrong");
   }
 
   // Getting the next question
@@ -59,6 +64,9 @@ async function myEvaluation() {
 }
 
 function proceed() {
+  freezeOptions = false;
+  selectedOption = null;
+  feedbackAction("down", "wrong");
   evalMsg.innerHTML = "";
   proceedButton.style.display = "none";
   evalButton.style.display = "block";
@@ -80,6 +88,7 @@ function handleClientLoad() {
   proceedButton = document.getElementById("proceed-btn");
   evalButton = document.getElementById("eval-btn");
   evalMsg = document.getElementById("eval-msg");
+  slide = document.querySelector(".feedback-item");
   proceedButton.style.display = "none";
   proceedButton.addEventListener("click", proceed);
   gapi.load("client", initClient);
@@ -118,6 +127,7 @@ async function getExerciseData(start, end, single) {
 // My Code
 
 function selectOption(index) {
+  if (freezeOptions) return;
   options = document.querySelectorAll(".option");
   options.forEach((option) => {
     option.classList.remove("choosen");
@@ -169,4 +179,23 @@ function nextRandomQuestion() {
   }
   selectedOption = null;
   return "no more questions";
+}
+
+function feedbackAction(direction, status) {
+  console.log("hello");
+  console.log(slide);
+  if (direction === "down") {
+    slide.classList.add("slideDown");
+    slide.classList.remove("slideUp");
+  } else if (direction === "up") {
+    slide.classList.remove("slideDown");
+    slide.classList.add("slideUp");
+    if (status === "correct") {
+      slide.classList.add("correct");
+      slide.classList.remove("wrong");
+    } else if (status === "wrong") {
+      slide.classList.add("wrong");
+      slide.classList.remove("correct");
+    }
+  }
 }

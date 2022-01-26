@@ -68,7 +68,41 @@ body {
   justify-content: center;
   align-items: center;
 }
+button {
+  cursor: pointer;
+}
 #permanent-msg {
   text-align: center;
   font-weight: 900;
+}
+.feedback-container {
+  width: 100%;
+  height: 100px;
+  position: relative;
+}
+
+.slideDown {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 0;
+  background-color: red;
+  transition: ease-out 0.5s;
+}
+
+.slideUp {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: green;
+  /* transition: ease-out 0.3s; */
+  transition: height ease-out 0.5s;
+}
+
+.slideUp.correct {
+  background-color: green;
+}
+.slideUp.wrong {
+  background-color: red;
 }

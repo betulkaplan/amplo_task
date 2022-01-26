@@ -15,20 +15,23 @@
 <body>
 	<div class="main">
 		<h2 id="permanent-msg">Please choose the option you think is right.</h2>
-		<div id="eval-msg"></div>
 		<div class="quiz-container">
 			<p class="question"> Which is the correct option?</p>
 			<div id="options-wrapper">
 
 			</div>
 		</div>
-
 		<div class="button-container">
 			<button id="eval-btn" onclick="myEvaluation()">Evaluate!</button>
 			<button id="proceed-btn" class="test">Proceed!</button>
 		</div>
 	</div>
-	<div class="feedback-container"></div>
+	<div id="eval-msg"></div>
+	<div class="feedback-container">
+		<div class="feedback-item"></div>
+	</div>
+
+
 
 	<script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
 		onreadystatechange="if (this.readyState === 'complete') this.onload()">
