@@ -22,6 +22,7 @@ let nextQuestion;
 let freezeOptions = false;
 let feedbackText;
 let score = 0;
+let totalScore = 0;
 
 // DOM elements
 let proceedButton;
@@ -73,14 +74,16 @@ async function myEvaluation() {
   evalButton.style.display = "none";
 
   // Getting the previous question's answer
-  const correctAnswerIndex = await getExerciseData(
+  const [correctAnswerIndex, score] = await getExerciseData(
     "A" + currentQuestion.raw,
     "F" + currentQuestion.raw,
     "single"
   );
+
   const prgs = document.getElementById("prgs-" + currentActive);
   prgs.style.color = "white";
   if (selectedOption == correctAnswerIndex) {
+    totalScore += score;
     prgs.style.backgroundColor = "#43aa8b";
     positiveAudio.play();
     evalMsg.innerHTML = `Correct! <br> (>‿◠)✌ +${score}`;
@@ -103,12 +106,16 @@ async function myEvaluation() {
 
 function proceed() {
   if (currentQuestion === "no more questions") {
-    const isConfirmed = confirm(
-      "No more questions, do you want to start over?"
-    );
-    if (isConfirmed) {
-      location.reload();
-    }
+    document.querySelector(".main").style.display = "none";
+    document.querySelector(".feedback-container").style.display = "none";
+    document.querySelector(".score").textContent = `${totalScore}`;
+    document.querySelector("#final-result").style.display = "block";
+    // const isConfirmed = confirm(
+    //   "No more questions, do you want to start over?"
+    // );
+    // if (isConfirmed) {
+    //   location.reload();
+    // }
     return;
   }
   nextAudio.play();
@@ -178,7 +185,7 @@ async function getExerciseData(start, end, single) {
     correct_answer_index = parseInt(response.result.values[0][4]);
     score = parseInt(response.result.values[0][5]);
   }
-  return correct_answer_index;
+  return [correct_answer_index, score];
 }
 
 // My Code

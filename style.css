@@ -217,3 +217,40 @@ button {
 .circle.active {
   border: 3px solid #277da1;
 }
+
+#final-result {
+  border: none;
+  height: 90vh;
+  width: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inner-result {
+  border: none;
+  border-radius: 50px;
+  background-color: #277da1;
+  padding: 50px;
+  font-size: 30px;
+  color: #fff;
+  margin-top: 50px;
+}
+.inner-result .score {
+  color: #fff;
+  font-size: 80px;
+}
+
+.restart {
+  background-color: #f4a261;
+  border-radius: 30px;
+  color: #fff;
+  padding: 10px;
+  cursor: pointer;
+  transition: ease 0.2s;
+}
+
+.restart:active {
+  transform: scale(0.99);
+  transition: ease 0.2s;
+}
