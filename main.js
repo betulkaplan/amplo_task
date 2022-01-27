@@ -21,6 +21,7 @@ let questions = [];
 let nextQuestion;
 let freezeOptions = false;
 let feedbackText;
+let score = 0;
 
 // DOM elements
 let proceedButton;
@@ -29,6 +30,37 @@ let evalMsg;
 let slide;
 let positiveAudio;
 let negativeAudio;
+
+/*Progres bar*/
+let progress;
+let prev;
+let next;
+let circles;
+let currentActive = 1;
+
+function nextProgress() {
+  currentActive++;
+  if (currentActive > circles.length) {
+    currentActive = circles.length;
+    currentActive = 1;
+  }
+  update();
+  console.log(currentActive);
+}
+
+function update() {
+  circles.forEach((circle, idx) => {
+    if (idx < currentActive) {
+      circle.classList.add("active");
+    } else {
+      circle.classList.remove("active");
+    }
+  });
+
+  const actives = document.querySelectorAll(".active");
+  const ratio = ((actives.length - 1) / (circles.length - 1)) * 100;
+  progress.style.width = `${ratio}%`;
+}
 
 async function myEvaluation() {
   if (selectedOption === null) {
@@ -45,14 +77,17 @@ async function myEvaluation() {
     "F" + currentQuestion.raw,
     "single"
   );
-
+  const prgs = document.getElementById("prgs-" + currentActive);
+  prgs.style.color = "white";
   if (selectedOption == correctAnswerIndex) {
+    prgs.style.backgroundColor = "#43aa8b";
     positiveAudio.play();
-    evalMsg.innerHTML = "Correct! <br> (>‿◠)✌";
+    evalMsg.innerHTML = `Correct! <br> (>‿◠)✌ +${score}`;
     feedbackText.innerHTML = `Yes, the Correct Answer: <br> [${currentQuestion.options[correctAnswerIndex]}]`;
     console.log("correct answer");
     feedbackAction("up", "correct");
   } else {
+    prgs.style.backgroundColor = "#f94144";
     negativeAudio.play();
     evalMsg.innerHTML = "Wrong! <br> (╥﹏╥)";
     feedbackText.innerHTML = `The Correct Answer: <br> [${currentQuestion.options[correctAnswerIndex]}]`;
@@ -63,12 +98,15 @@ async function myEvaluation() {
   // Getting the next question
   nextQuestion = nextRandomQuestion();
   currentQuestion = nextQuestion;
-  if (nextQuestion === "no more questions") {
-    return alert("no more questions");
-  }
 }
 
 function proceed() {
+  if (currentQuestion === "no more questions") {
+    // return alert("no more questions");
+    confirm("No more questions, do you want to start over?");
+    return location.reload();
+  }
+  nextProgress();
   freezeOptions = false;
   selectedOption = null;
   feedbackAction("down", "wrong");
@@ -91,6 +129,8 @@ function proceed() {
 // GAPI Connection
 // collect dom elements
 function handleClientLoad() {
+  circles = document.querySelectorAll(".circle");
+  progress = document.getElementById("progress");
   positiveAudio = document.getElementById("positive-audio");
   negativeAudio = document.getElementById("negative-audio");
   proceedButton = document.getElementById("proceed-btn");
@@ -129,6 +169,7 @@ async function getExerciseData(start, end, single) {
     startTest(response.result.values);
   } else {
     correct_answer_index = parseInt(response.result.values[0][4]);
+    score = parseInt(response.result.values[0][5]);
   }
   return correct_answer_index;
 }
