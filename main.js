@@ -107,6 +107,7 @@ function proceed() {
     document.querySelector(".feedback-container").style.display = "none";
     document.querySelector(".score").textContent = `${totalScore}`;
     document.querySelector("#final-result").style.display = "block";
+    document.getElementById("final-audio").play();
     return;
   }
   nextAudio.play();
