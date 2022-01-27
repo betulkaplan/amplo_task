@@ -102,7 +102,6 @@ async function myEvaluation() {
 
 function proceed() {
   if (currentQuestion === "no more questions") {
-    // return alert("no more questions");
     confirm("No more questions, do you want to start over?");
     return location.reload();
   }
