@@ -47,7 +47,6 @@ function nextProgress() {
     currentActive = 1;
   }
   update();
-  console.log(currentActive);
 }
 
 function update() {
@@ -88,14 +87,12 @@ async function myEvaluation() {
     positiveAudio.play();
     evalMsg.innerHTML = `Correct! <br> (>‿◠)✌ +${score}`;
     feedbackText.innerHTML = `Yes, the Correct Answer: <br> [${currentQuestion.options[correctAnswerIndex]}]`;
-    console.log("correct answer");
     feedbackAction("up", "correct");
   } else {
     prgs.style.backgroundColor = "#f94144";
     negativeAudio.play();
     evalMsg.innerHTML = "Wrong! <br> (╥﹏╥)";
     feedbackText.innerHTML = `The Correct Answer: <br> [${currentQuestion.options[correctAnswerIndex]}]`;
-    console.log("wrong answer");
     feedbackAction("up", "wrong");
   }
 
@@ -110,12 +107,6 @@ function proceed() {
     document.querySelector(".feedback-container").style.display = "none";
     document.querySelector(".score").textContent = `${totalScore}`;
     document.querySelector("#final-result").style.display = "block";
-    // const isConfirmed = confirm(
-    //   "No more questions, do you want to start over?"
-    // );
-    // if (isConfirmed) {
-    //   location.reload();
-    // }
     return;
   }
   nextAudio.play();
@@ -246,7 +237,6 @@ function nextRandomQuestion() {
 }
 
 function feedbackAction(direction, status) {
-  console.log("hello");
   if (direction === "down") {
     slide.classList.add("slideDown");
     slide.classList.remove("slideUp");
