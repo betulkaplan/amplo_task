@@ -44,12 +44,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100px;
+  width: 130px;
   height: 50px;
   border-style: solid;
   border-radius: 25px;
-  padding-left: auto;
-  padding-right: auto;
+  padding: 10px;
+  font-size: 0.9rem;
   margin: 1rem;
   text-align: center;
   cursor: pointer;
@@ -77,8 +77,10 @@ button {
 }
 .feedback-container {
   width: 100%;
-  height: 100px;
+  height: 300px;
   position: relative;
+  border-radius: 40px 40px 0px 0px;
+  overflow: hidden;
 }
 
 .slideDown {
@@ -86,7 +88,6 @@ button {
   bottom: 0;
   width: 100%;
   height: 0;
-  background-color: red;
   transition: ease-out 0.5s;
 }
 
@@ -101,8 +102,53 @@ button {
 }
 
 .slideUp.correct {
-  background-color: green;
+  background-color: #43aa8b;
 }
 .slideUp.wrong {
-  background-color: red;
+  background-color: #f94144;
+}
+
+#eval-msg {
+  color: #fff;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.feedback-text {
+  padding-top: 15px;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+}
+
+#eval-btn,
+#proceed-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 170px;
+  height: 50px;
+  border-style: solid;
+  border-radius: 25px;
+  padding: 10px;
+  font-size: 0.9rem;
+  margin: 1rem;
+  text-align: center;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+#eval-btn:active,
+.proceed-btn:active {
+  transform: scale(0.9);
+}
+#proceed-btn {
+  background-color: #f9c74f;
+  border: #f9c74f;
+}
+
+#eval-btn {
+  background-color: #277da1;
+  border: #277da1;
 }

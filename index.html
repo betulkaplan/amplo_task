@@ -13,6 +13,12 @@
 </head>
 
 <body>
+	<audio id="positive-audio">
+		<source src="./assests/sounds/mixkit-achievement-bell-600.wav" type="audio/wav">
+	</audio>
+	<audio id="negative-audio">
+		<source src="./assests/sounds/mixkit-arcade-retro-game-over-213.wav" type="audio/wav">
+	</audio>
 	<div class="main">
 		<h2 id="permanent-msg">Please choose the option you think is right.</h2>
 		<div class="quiz-container">
@@ -26,9 +32,11 @@
 			<button id="proceed-btn" class="test">Proceed!</button>
 		</div>
 	</div>
-	<div id="eval-msg"></div>
 	<div class="feedback-container">
-		<div class="feedback-item"></div>
+		<div class="feedback-item">
+			<div id="eval-msg"></div>
+			<p class="feedback-text"></p>
+		</div>
 	</div>
 
 

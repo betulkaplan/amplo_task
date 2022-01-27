@@ -20,12 +20,15 @@ let selectedOption = null;
 let questions = [];
 let nextQuestion;
 let freezeOptions = false;
+let feedbackText;
 
 // DOM elements
 let proceedButton;
 let evalButton;
 let evalMsg;
 let slide;
+let positiveAudio;
+let negativeAudio;
 
 async function myEvaluation() {
   if (selectedOption === null) {
@@ -44,13 +47,15 @@ async function myEvaluation() {
   );
 
   if (selectedOption == correctAnswerIndex) {
-    evalMsg.innerHTML = "Correct!";
-    evalMsg.style.color = "green";
+    positiveAudio.play();
+    evalMsg.innerHTML = "Correct! <br> (>‿◠)✌";
+    feedbackText.innerHTML = `Yes, the Correct Answer: <br> [${currentQuestion.options[correctAnswerIndex]}]`;
     console.log("correct answer");
     feedbackAction("up", "correct");
   } else {
-    evalMsg.innerHTML = "Wrong!";
-    evalMsg.style.color = "red";
+    negativeAudio.play();
+    evalMsg.innerHTML = "Wrong! <br> (╥﹏╥)";
+    feedbackText.innerHTML = `The Correct Answer: <br> [${currentQuestion.options[correctAnswerIndex]}]`;
     console.log("wrong answer");
     feedbackAction("up", "wrong");
   }
@@ -84,11 +89,15 @@ function proceed() {
 }
 
 // GAPI Connection
+// collect dom elements
 function handleClientLoad() {
+  positiveAudio = document.getElementById("positive-audio");
+  negativeAudio = document.getElementById("negative-audio");
   proceedButton = document.getElementById("proceed-btn");
   evalButton = document.getElementById("eval-btn");
   evalMsg = document.getElementById("eval-msg");
   slide = document.querySelector(".feedback-item");
+  feedbackText = document.querySelector(".feedback-text");
   proceedButton.style.display = "none";
   proceedButton.addEventListener("click", proceed);
   gapi.load("client", initClient);
@@ -183,7 +192,6 @@ function nextRandomQuestion() {
 
 function feedbackAction(direction, status) {
   console.log("hello");
-  console.log(slide);
   if (direction === "down") {
     slide.classList.add("slideDown");
     slide.classList.remove("slideUp");
