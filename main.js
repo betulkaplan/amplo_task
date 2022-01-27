@@ -30,6 +30,7 @@ let evalMsg;
 let slide;
 let positiveAudio;
 let negativeAudio;
+let nextAudio;
 
 /*Progres bar*/
 let progress;
@@ -105,6 +106,7 @@ function proceed() {
     confirm("No more questions, do you want to start over?");
     return location.reload();
   }
+  nextAudio.play();
   nextProgress();
   freezeOptions = false;
   selectedOption = null;
@@ -132,6 +134,7 @@ function handleClientLoad() {
   progress = document.getElementById("progress");
   positiveAudio = document.getElementById("positive-audio");
   negativeAudio = document.getElementById("negative-audio");
+  nextAudio = document.getElementById("next-audio");
   proceedButton = document.getElementById("proceed-btn");
   evalButton = document.getElementById("eval-btn");
   evalMsg = document.getElementById("eval-msg");
