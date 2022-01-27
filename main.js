@@ -103,8 +103,13 @@ async function myEvaluation() {
 
 function proceed() {
   if (currentQuestion === "no more questions") {
-    confirm("No more questions, do you want to start over?");
-    return location.reload();
+    const isConfirmed = confirm(
+      "No more questions, do you want to start over?"
+    );
+    if (isConfirmed) {
+      location.reload();
+    }
+    return;
   }
   nextAudio.play();
   nextProgress();
